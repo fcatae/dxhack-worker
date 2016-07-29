@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AD5237B8-D5C2-4915-8F57-0940B5D2E645}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FA806510-3F96-439B-90A0-56C5B5FC0C91}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CrawlerWorker", "src\CrawlerWorker\CrawlerWorker.xproj", "{EB470205-9FF8-4E24-BAF6-4225C7B7185F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB470205-9FF8-4E24-BAF6-4225C7B7185F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB470205-9FF8-4E24-BAF6-4225C7B7185F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB470205-9FF8-4E24-BAF6-4225C7B7185F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB470205-9FF8-4E24-BAF6-4225C7B7185F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EB470205-9FF8-4E24-BAF6-4225C7B7185F} = {AD5237B8-D5C2-4915-8F57-0940B5D2E645}
+	EndGlobalSection
+EndGlobal
