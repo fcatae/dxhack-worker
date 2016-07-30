@@ -6,7 +6,7 @@
   },
 
   "publishOptions": {
-    "includeFiles": "appsettings.json"
+    "includeFiles": [ "appsettings.json", "Dockerfile" ]
   },
 
   "dependencies": {
