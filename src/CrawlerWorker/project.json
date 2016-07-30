@@ -5,6 +5,10 @@
     "copyToOutput": "appsettings.json"
   },
 
+  "publishOptions": {
+    "includeFiles": "appsettings.json"
+  },
+
   "dependencies": {
     "Microsoft.Extensions.Configuration": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
