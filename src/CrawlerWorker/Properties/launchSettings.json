@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CrawlerWorker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Crawler": "http://localhost:49866/api/crawler"
+      }
+    }
+  }
+}

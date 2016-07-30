@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
 
 namespace CrawlerWorker
 {
@@ -18,7 +19,8 @@ namespace CrawlerWorker
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables();
 
             var Configuration = builder.Build();
 
@@ -36,7 +38,10 @@ namespace CrawlerWorker
                 {
                     DoWork(connectionString, crawlerEndpoint);
                 }
-                catch { }
+                catch(Exception ex) {
+                    Console.WriteLine();
+                    Console.WriteLine(ex.Message);
+                }
 
                 Task.Delay(delay).Wait();
             }
@@ -51,7 +56,7 @@ namespace CrawlerWorker
                 SqlCommand cmd = new SqlCommand("prGetNexLink", conn);
 
                 conn.Open();
-
+                
                 var reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -62,16 +67,19 @@ namespace CrawlerWorker
 
                     string body = LoadWebPage(link);
 
-                    FeedSearcher(crawlerEndpoint, body);
-
                     using (SqlConnection connInsert = new SqlConnection(connectionString))
                     {
                         connInsert.Open();
                         InsertLink(connInsert, link, body);
                     }                       
                 }
-
             }
+
+            FeedSearcher(crawlerEndpoint, "");
+            FeedSearcher(crawlerEndpoint, "");
+            FeedSearcher(crawlerEndpoint, "");
+            FeedSearcher(crawlerEndpoint, "");
+            FeedSearcher(crawlerEndpoint, "");
         }
 
         static string LoadWebPage(string link)
@@ -95,13 +103,22 @@ namespace CrawlerWorker
             return result;
         }
 
-        static void FeedSearcher(string url, string body)
+        static void FeedSearcher(string link, string body)
         {
             using (var client = new HttpClient())
-            {
-                var content = new StringContent(body);
-                
-                client.PostAsync(url, content).Wait();
+            {                
+                var url = new Uri(link);
+
+                var req = new HttpRequestMessage(HttpMethod.Get, url);
+
+                req.Content = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = client.SendAsync(req).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                }
             }
         }
 
