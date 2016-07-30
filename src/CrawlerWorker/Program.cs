@@ -23,11 +23,26 @@ namespace CrawlerWorker
             var Configuration = builder.Build();
 
             string connectionString = Configuration["Database"];
+            string crawlerEndpoint = Configuration["Crawler"];
+            string delayTimeString = Configuration["Delay"];
 
-            DoWork(connectionString);
+            int delay = Int32.Parse(delayTimeString);
+
+            while (true)
+            {
+                Console.Write(".");
+
+                try
+                {
+                    DoWork(connectionString, crawlerEndpoint);
+                }
+                catch { }
+
+                Task.Delay(delay).Wait();
+            }
         }
 
-        static void DoWork(string connectionString)
+        static void DoWork(string connectionString, string crawlerEndpoint)
         {
             List<string> linkList = new List<string>();
 
@@ -47,7 +62,13 @@ namespace CrawlerWorker
 
                     string body = LoadWebPage(link);
 
-                    FeedSearcher(body);
+                    FeedSearcher(crawlerEndpoint, body);
+
+                    using (SqlConnection connInsert = new SqlConnection(connectionString))
+                    {
+                        connInsert.Open();
+                        InsertLink(connInsert, link, body);
+                    }                       
                 }
 
             }
@@ -74,25 +95,24 @@ namespace CrawlerWorker
             return result;
         }
 
-        static void FeedSearcher(string body)
+        static void FeedSearcher(string url, string body)
         {
-            Debug.WriteLine(body);
-            //using (var client = new HttpClient())
-            //{
-            //    var url = new Uri("");
-
-            //    client.PostAsync()
-            //}
+            using (var client = new HttpClient())
+            {
+                var content = new StringContent(body);
+                
+                client.PostAsync(url, content).Wait();
+            }
         }
 
-        static void InsertLink(SqlConnection conn)
+        static void InsertLink(SqlConnection conn, string link, string body)
         {
-            SqlCommand cmd = new SqlCommand("INSERT tbLinks(keywords,link) VALUES (@1,@2)", conn);
-            var p1 = cmd.Parameters.Add("@1", SqlDbType.VarChar, 2000);
+            SqlCommand cmd = new SqlCommand("INSERT tbLinks(link,body) VALUES (@1,@2)", conn);
+            var p1 = cmd.Parameters.Add("@1", SqlDbType.VarChar, 60000);
             var p2 = cmd.Parameters.Add("@2", SqlDbType.VarChar, 2000);
 
-            p1.Value = "test";
-            p2.Value = "http://localhost";
+            p1.Value = link;
+            p2.Value = body;
 
             cmd.ExecuteNonQuery();
         }
