@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +27,7 @@ namespace CrawlerWorker
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("select link from tbPendingLinks", conn);
+                SqlCommand cmd = new SqlCommand("prGetNexLink", conn);
 
                 conn.Open();
 
@@ -35,15 +36,25 @@ namespace CrawlerWorker
                 while (reader.Read())
                 {
                     string link = reader.GetString(0);
-                    linkList.Add(link);
-                }
 
-                using (SqlConnection connInsert = new SqlConnection(connectionString))
-                {
-                    connInsert.Open();
-                    InsertLink(connInsert);
+                    linkList.Add(link);
+
+                    string body = LoadWebPage(link);
+
+                    FeedSearcher(body);
                 }
+                
             }
+        }
+
+        static string LoadWebPage(string link)
+        {
+            return "<html></html>";
+        }
+
+        static void FeedSearcher(string body)
+        {
+            Debug.WriteLine(body);
         }
 
         static void InsertLink(SqlConnection conn)
