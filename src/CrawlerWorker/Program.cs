@@ -15,7 +15,7 @@ namespace CrawlerWorker
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("CRAWLER Worker");
+            Console.WriteLine("CRAWLER Worker v2");
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
