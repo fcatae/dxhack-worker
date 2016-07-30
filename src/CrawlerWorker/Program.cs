@@ -126,7 +126,7 @@ namespace CrawlerWorker
         {
             SqlCommand cmd = new SqlCommand("INSERT tbLinks(link,body) VALUES (@1,@2)", conn);
             var p1 = cmd.Parameters.Add("@1", SqlDbType.VarChar, 60000);
-            var p2 = cmd.Parameters.Add("@2", SqlDbType.VarChar, 2000);
+            var p2 = cmd.Parameters.Add("@2", SqlDbType.VarChar, -1);
 
             p1.Value = link;
             p2.Value = body;
