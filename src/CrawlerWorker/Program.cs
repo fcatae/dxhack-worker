@@ -15,6 +15,7 @@ namespace CrawlerWorker
             Console.WriteLine("CRAWLER Worker");
 
             var builder = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json");
 
             var Configuration = builder.Build();
